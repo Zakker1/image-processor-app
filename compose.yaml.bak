@@ -1,0 +1,65 @@
+services:
+  js-backend:
+    build:
+      context: ./backend
+    container_name: js-backend
+    restart: unless-stopped
+    init: true
+    ports:
+      - "3000:3000"  # Expose backend API
+    depends_on:
+      - redis
+    networks:
+      - appnet
+    # env_file: ./backend/.env  # Uncomment if .env file exists
+
+  js-frontend:
+    build:
+      context: ./frontend
+    container_name: js-frontend
+    restart: unless-stopped
+    init: true
+    ports:
+      - "5173:5173"  # Expose frontend for browser access
+    depends_on:
+      - js-backend
+    networks:
+      - appnet
+    # env_file: ./frontend/.env  # Uncomment if .env file exists
+
+  py-worker:
+    build:
+      context: ./worker
+    container_name: py-worker
+    restart: unless-stopped
+    depends_on:
+      - redis
+    networks:
+      - appnet
+    # env_file: ./worker/.env  # Uncomment if .env file exists
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: unless-stopped
+    networks:
+      - appnet
+    ports:
+      - "6379:6379"  # Expose Redis for development/debugging
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Uncomment the following lines to persist Redis data
+    # volumes:
+    #   - redis-data:/data
+
+networks:
+  appnet:
+    driver: bridge
+
+# Uncomment the following if you want to persist Redis data
+# volumes:
+#   redis-data:
+#     driver: local

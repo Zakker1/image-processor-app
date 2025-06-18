@@ -1,0 +1,81 @@
+# 1. Version control
+.git/
+.gitignore
+.svn/
+.hg/
+
+# 2. IDE/editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 3. Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+
+# 4. Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.coverage
+
+# 5. Build outputs and development artifacts
+dist/
+build/
+out/
+debug/
+*.log
+
+# 6. Test files and directories
+test/
+tests/
+
+# 7. Temporary and local files
+tmp/
+temp/
+*.tmp
+.local/
+local/
+
+# 8. Environment and secrets
+.env*
+*.env
+*.pem
+*.key
+*.crt
+config.local.*
+*.local.yml
+
+# 9. Documentation and backups
+docs/
+*.md
+README*
+*.bak
+
+# 10. Docker and Compose files
+Dockerfile*
+docker-compose*
+
+# 11. Project-specific: uploads (if not needed in build context)
+uploads/
+
+# 12. Miscellaneous (files with no extension)
+*
+!*/
+!*.js
+!*.json
+!*.jsx
+!*.yaml
+!*.yml
+!*.txt
+!*.py
+
+# Exclude .dockerignore itself from being ignored
+!.dockerignore
+
+# Notes:
+# - Adjust 'uploads/' if you need to include it in the build context.
+# - The last block ensures only known source files are included; adjust as needed for your project.

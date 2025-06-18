@@ -1,0 +1,104 @@
+# Image Processor Application
+
+This project is an image processing application that allows users to upload images, which are then processed by a worker service. The application is structured into three main components: frontend, backend, and worker.
+
+## Project Structure
+
+```
+image-processor-app
+├── frontend          # React frontend for user interaction
+│   ├── src
+│   │   └── App.jsx  # Main React component for file upload and status checking
+│   ├── package.json  # Frontend dependencies
+│   ├── Dockerfile    # Docker configuration for frontend
+│   └── README.md     # Frontend documentation
+├── backend           # Node.js backend for handling uploads and task management
+│   ├── index.js      # Express server with upload and status routes
+│   ├── package.json   # Backend dependencies
+│   ├── Dockerfile     # Docker configuration for backend
+│   └── README.md      # Backend documentation
+├── worker            # Python worker for processing images
+│   ├── worker.py      # Image processing logic
+│   ├── requirements.txt # Python dependencies
+│   ├── Dockerfile      # Docker configuration for worker
+│   └── README.md       # Worker documentation
+├── uploads           # Directory for storing uploaded images and processed results
+├── docker-compose.yml # Docker Compose configuration for the entire application
+└── README.md         # Main project documentation
+```
+
+## Getting Started
+
+To get started with the application, follow these steps:
+
+1. **Clone the repository**:
+   ```
+   git clone <repository-url>
+   cd image-processor-app
+   ```
+
+2. **Build and run the application using Docker Compose**:
+   ```
+   docker-compose up --build
+   ```
+
+3. **Access the frontend**:
+   Open your browser and navigate to `http://localhost:5173` to access the application.
+
+## Services
+
+### Frontend
+
+The frontend is built with React and allows users to upload images and check the processing status. It communicates with the backend via HTTP requests.
+
+### Backend
+
+The backend is built with Node.js and Express. It handles image uploads and manages tasks using Redis. It provides endpoints for uploading images and checking their processing status.
+
+### Worker
+
+The worker is a Python service that processes images from a Redis queue. It retrieves tasks, processes the images using the Pillow library, and updates the task status in Redis.
+
+## Dependencies
+
+- **Frontend**: React, Axios
+- **Backend**: Express, Multer, Redis, UUID
+- **Worker**: Redis, Pillow, NumPy
+
+## Running with Docker
+
+This project is fully containerized and can be run using Docker Compose. The setup uses specific versions and configurations for each service:
+
+- **Node.js Version**: All Node.js services (frontend and backend) use Node.js version `22.13.1-slim` (configurable via the `NODE_VERSION` build argument in the Dockerfiles).
+- **Python Version**: The worker service uses Python `3.10-slim`.
+- **Redis**: The application uses the official `redis:latest` image as a message broker and task queue.
+
+### Build and Run
+
+To build and start all services, run:
+
+```
+docker-compose up --build
+```
+
+This will build the Docker images for the frontend, backend, and worker, and start all services along with Redis.
+
+### Ports
+
+- **Frontend**: Exposed on [http://localhost:5173](http://localhost:5173)
+- **Backend**: Exposed on [http://localhost:3000](http://localhost:3000)
+- **Redis**: Exposed on `localhost:6379` (for development/debugging)
+
+### Environment Variables
+
+- No environment variables are strictly required by default. If you need to provide custom environment variables (e.g., for connecting to external services), you can create `.env` files in the respective service directories and uncomment the `env_file` lines in `docker-compose.yml`.
+
+### Special Configuration
+
+- The `uploads` directory is used by the backend to store uploaded and processed images. By default, this is managed inside the backend container.
+- Redis data is not persisted by default. To enable persistence, uncomment the `volumes` section for Redis in `docker-compose.yml`.
+- All services are connected via a custom Docker network (`appnet`) for internal communication.
+
+## License
+
+This project is licensed under the MIT License.
